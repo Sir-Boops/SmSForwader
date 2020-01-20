@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         final EditText number = findViewById(R.id.number);
         final Button save = findViewById(R.id.save);
         final Switch run = findViewById(R.id.run);
+
+        // Make phone number look pretty
+        number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         // On start make not running
         run.setChecked(false);
@@ -57,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefs.edit().putString("number", number.getText().toString()).apply();
+                prefs.edit().putString("number", number.getText().toString().replaceAll("\\D+", "")).apply();
                 MainActivity.number = prefs.getString("number", "");
             }
         });
